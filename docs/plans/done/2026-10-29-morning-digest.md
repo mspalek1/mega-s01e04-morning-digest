@@ -1,6 +1,6 @@
 ---
 plan: morning-digest
-status: ready
+status: done
 owner: rook
 opened: 2026-10-29
 ---
@@ -77,3 +77,13 @@ page again with `LANE_MARKER` unset (the banner reads "no marker set") and uploa
 link. Move this plan to `docs/plans/done/` with its issue list.
 
 Done when: the preview link no longer shows the lane marker.
+
+## Issues
+
+- [#1 Run log reader and shared digest types](https://github.com/mspalek1/mega-s01e04-morning-digest/issues/1)
+- [#2 Digest page: GET /digest/:night](https://github.com/mspalek1/mega-s01e04-morning-digest/issues/2)
+- [#3 Digest JSON: GET /api/digest/:night](https://github.com/mspalek1/mega-s01e04-morning-digest/issues/3)
+- [#4 Status board: link nights and show run counts](https://github.com/mspalek1/mega-s01e04-morning-digest/issues/4)
+- [#5 Digest routes: add acceptance tests](https://github.com/mspalek1/mega-s01e04-morning-digest/issues/5)
+- [#6 Review: publish a static HTML digest preview](https://github.com/mspalek1/mega-s01e04-morning-digest/issues/6)
+- [#7 Cleanup: remove the preview marker and archive the plan](https://github.com/mspalek1/mega-s01e04-morning-digest/issues/7)

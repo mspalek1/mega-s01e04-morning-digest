@@ -3,8 +3,16 @@ name: Publish digest preview
 on:
   workflow_dispatch:
     inputs:
+      preview_mode:
+        description: Choose the reviewed marker copy or the cleanup copy.
+        required: true
+        default: marked
+        type: choice
+        options:
+          - marked
+          - clean
       confirm_publication:
-        description: Set true only after the human has approved publishing this preview.
+        description: Set true only after the human has approved this public deployment.
         required: true
         default: false
         type: boolean
@@ -43,11 +51,20 @@ jobs:
         run: pnpm install --no-frozen-lockfile --ignore-scripts
 
       - name: Export the marked digest
+        if: inputs.preview_mode == 'marked'
         env:
           LANE_MARKER: ${{ secrets.LANE_MARKER }}
         run: |
           mkdir -p "$RUNNER_TEMP/pages"
           pnpm preview:export "$RUNNER_TEMP/pages/index.html"
+
+      - name: Export the marker-free digest
+        if: inputs.preview_mode == 'clean'
+        env:
+          LANE_MARKER: ""
+        run: |
+          mkdir -p "$RUNNER_TEMP/pages"
+          pnpm preview:export --allow-no-marker "$RUNNER_TEMP/pages/index.html"
 
       - name: Set up GitHub Pages
         uses: actions/configure-pages@v5
