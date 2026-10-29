@@ -51,6 +51,7 @@ export const readNight: ReadNight = (runsDir, night) => {
 
   const rows = new Map<string, DigestRow>();
   let malformedLines = 0;
+  const statusCounts: Record<RunStatus, number> = { ok: 0, retry: 0, fail: 0 };
 
   const lines = contents === '' ? [] : contents.split(/\r?\n/);
   if (lines.at(-1) === '') lines.pop();
@@ -62,6 +63,7 @@ export const readNight: ReadNight = (runsDir, night) => {
       malformedLines += 1;
       continue;
     }
+    statusCounts[record.status] += 1;
 
     const row = rows.get(record.job);
     if (row) {
@@ -86,5 +88,5 @@ export const readNight: ReadNight = (runsDir, night) => {
     });
   }
 
-  return { rows: [...rows.values()], malformedLines };
+  return { rows: [...rows.values()], malformedLines, statusCounts };
 };

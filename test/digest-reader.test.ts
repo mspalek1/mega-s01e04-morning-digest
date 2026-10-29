@@ -28,6 +28,7 @@ describe('readNight', () => {
     expect(result).not.toBeNull();
     expect(result?.rows).toHaveLength(5);
     expect(result?.malformedLines).toBe(1);
+    expect(result?.statusCounts).toEqual({ ok: 10, retry: 4, fail: 1 });
 
     const refresh = result?.rows.find((row) => row.job === 'fixtures/refresh');
     expect(refresh).toEqual({
@@ -66,6 +67,7 @@ describe('readNight', () => {
         lastAt: '2026-01-02T02:00:00+01:00',
       }],
       malformedLines: 0,
+      statusCounts: { ok: 1, retry: 1, fail: 0 },
     });
   });
 
@@ -74,7 +76,11 @@ describe('readNight', () => {
     expect(readNight(runsDir, '2026-01-03')).toBeNull();
 
     writeFileSync(join(runsDir, '2026-01-03.jsonl'), '');
-    expect(readNight(runsDir, '2026-01-03')).toEqual({ rows: [], malformedLines: 0 });
+    expect(readNight(runsDir, '2026-01-03')).toEqual({
+      rows: [],
+      malformedLines: 0,
+      statusCounts: { ok: 0, retry: 0, fail: 0 },
+    });
   });
 
   it('counts blank and invalid records without throwing', () => {
@@ -84,7 +90,11 @@ describe('readNight', () => {
       '{"at":"not-a-time","job":"bad","status":"ok","owner":null}\n\nnot json\n',
     );
 
-    expect(readNight(runsDir, '2026-01-04')).toEqual({ rows: [], malformedLines: 3 });
+    expect(readNight(runsDir, '2026-01-04')).toEqual({
+      rows: [],
+      malformedLines: 3,
+      statusCounts: { ok: 0, retry: 0, fail: 0 },
+    });
   });
 
   it('does not modify the supplied run-log fixture', () => {
