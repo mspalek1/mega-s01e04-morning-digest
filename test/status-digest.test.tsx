@@ -35,7 +35,8 @@ afterEach(() => rmSync(runsDir, { recursive: true, force: true }));
 
 describe('status board digest links', () => {
   it('links each night and shows per-attempt status counts', async () => {
-    const response = await createApp({ ...baseConfig, runsDir }).request('/');
+    const app = createApp({ ...baseConfig, runsDir });
+    const response = await app.request('/');
     const html = await response.text();
 
     expect(response.status).toBe(200);
@@ -43,6 +44,8 @@ describe('status board digest links', () => {
     expect(html).toContain('href="/digest/2026-01-01"');
     expect(html).toContain('ok 1 / retry 1 / fail 1');
     expect(html).toContain('ok 1 / retry 0 / fail 0');
+    expect((await app.request('/digest/2026-01-01')).status).toBe(200);
+    expect((await app.request('/digest/2026-01-02')).status).toBe(200);
   });
 
   it('keeps the empty state when the runs directory has no nights', async () => {

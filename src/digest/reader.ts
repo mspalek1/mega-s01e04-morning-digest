@@ -57,7 +57,6 @@ export const readNight: ReadNight = (runsDir, night) => {
   if (lines.at(-1) === '') lines.pop();
 
   for (const line of lines) {
-
     const record = parseLine(line);
     if (!record) {
       malformedLines += 1;
